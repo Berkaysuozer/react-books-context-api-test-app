@@ -2,36 +2,49 @@ import React from 'react';
 import './BookList.css';
 import Book from './Book';
 import { BookContext } from '../contexts/BookContext'
+import { ThemeContext } from '../contexts/ThemeContext'
 
 class BookList extends React.Component {
 
     render() {
         return (
-            <BookContext.Consumer>{bookcontextvalue => {
-                return (
-                    <section className="page-section bg-light" id="portfolio">
-                        <div className="container">
-                            <div className="text-center">
-                                <h2 className="section-heading text-uppercase">BookFolio</h2>
-                                <h3 className="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
-                            </div>
-                            <div className="row">
-                                {
-                                    bookcontextvalue.books.map((book, i) => {
-                                        return <Book book={book}
-                                            key={i}
-                                        />
-                                    })}
+            <ThemeContext.Consumer>{(contextTheme) => (
+                <BookContext.Consumer>
+                    {contextBook => {
+                        const { books } = contextBook;
+                        const { changeTheme, isDarkTheme, dark, light } = contextTheme
+                        const theme = isDarkTheme ? dark : light;
+
+                        return (
+                            <section className="page-section " style={{ background: theme.bg, color: theme.txt }} id="portfolio">
+                                <div className="container">
+                                    <div className="text-center">
+                                     <h2 className="section-heading "
+                                            >Berkay's Favorite Books</h2>
+                                        <h3 className="section-subheading text-muted"> Dreams can come true, but there is a secret. They’re realized through the magic of persistence, determination, commitment, passion, practice, <br></br>focus and hard work. They happen a step at a time, manifested over years, not weeks. -Elbert Hubbard</h3>
+                                        <button type='button' className='btn btn-sm btn-info mb-4' onClick={changeTheme}>changeTheme</button>
+                                    </div>
+                                    <div className="row">
+                                        {
+                                            books.map((book, i) => {
+                                                return <Book book={book}
+                                                    key={i}
+                                                />
+                                            })}
 
 
 
-                            </div>
-                        </div>
-                    </section>
+                                    </div>
+                                </div>
+                            </section>
 
-                )
-            }}
-            </BookContext.Consumer>
+                        )
+                    }}
+                </BookContext.Consumer>
+            )}
+
+            </ThemeContext.Consumer>
+
         )
     }
 
